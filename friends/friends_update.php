@@ -7,6 +7,13 @@ $password = 'camp2015';
 $dbh = new PDO($dsn,$user,$password);
 $dbh->query('SET NAMES utf8');
 
+$flag = false;
+
+// if ($flag==false){
+
+// 	echo '変更を入力してください';
+
+// }
 if (isset($_POST['name'])){
 	echo 'POST送信された！';
 	
@@ -18,6 +25,7 @@ if (isset($_POST['name'])){
 	$stmt->execute();
 
 	//処理が全て終わった後、都道府県一覧に戻る
+	// var_dump($_SERVER);
 	header('Location: http://'.$_SERVER['HTTP_HOST'].'/friends/index.php');
 }else{
 	echo 'POST送信されてない';
@@ -33,6 +41,7 @@ if (isset($_POST['name'])){
 <body>
 	<?php
 	//2.SQLで指令をだす
+	//名前を変える意味は？わかりやすくするため？
 		$sql_friends = 'SELECT * FROM `friends_table` WHERE `id` = '.$_GET['id'];
 
 		$stmt_friends = $dbh->prepare($sql_friends);
@@ -41,6 +50,7 @@ if (isset($_POST['name'])){
 
 		$rec_friends = $stmt_friends->fetch(PDO::FETCH_ASSOC);
 
+		//ここで変数に代入するのはやはり後でめんどくさくないように？
 		$id = $rec_friends['id'];
 		$area_table_id = $rec_friends['area_table_id'];
 		$name = $rec_friends['name'];
@@ -49,10 +59,10 @@ if (isset($_POST['name'])){
 
 
 		$sql = 'SELECT * FROM `area_table`';
-		//echo $sql;
 		$stmt = $dbh->prepare($sql);
 
 		$stmt->execute();
+		$flag=true;
 	?>
 	<h2>お友達の編集</h2>
 
@@ -91,10 +101,10 @@ if (isset($_POST['name'])){
 			?>
 		</select><br />
 		年齢
-		<input name="age" type="text" style="width:100px;height:30px;" maxlength="10" value="<?php echo $age; ?>"><br />
+		<input name="age" type="text" style="width:100px;height:30px;" maxlength="3" value="<?php echo $age; ?>"><br />
 		<input name="id" type="hidden" value="<?php echo $id; ?>">
 		<br />		
-		<!-- こいつを押した瞬間どうなる？どこに飛ぶ？ -->
+		<!-- こいつを押した瞬間どこに飛ぶ？ 普通は<form action=""を設定する-->
 		<input type="submit" value="保存" >
 	</form>
 </body>

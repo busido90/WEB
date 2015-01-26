@@ -3,7 +3,7 @@
 //1.データベースに接続する
 $dsn = 'mysql:dbname=FriendsDB;host=localhost';
 $user = 'root';
-$password = 'mangoshake';
+$password = 'camp2015';
 $dbh = new PDO($dsn,$user,$password);
 $dbh->query('SET NAMES utf8');
 
@@ -15,6 +15,10 @@ if (isset($_GET['del_flag'])){
 
 	$del_stmt = $dbh->prepare($del_sql);
 	$del_stmt->execute();
+
+	//セキュリティを考えて別な画面（URLを変えるため）に飛ばしておこう！
+	//別画面に遷移する処理がここに記述されているとベスト
+	
 }
 
 

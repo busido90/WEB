@@ -16,7 +16,7 @@
 		$dbh =new PDO($dsn, $user, $password);
 		$dbh->query('SET NAMES utf8');
 
-		$sql = 'SELECT * FROM area_table WHERE 1';
+		$sql = 'select area_table.*,count(friends_table.id) as `friends_cnt` from area_table left outer join friends_table on area_table.id = friends_table.area_table_id group by area_table.id';
 		$stmt = $dbh->prepare($sql);
 		$stmt->execute();
 		// var_dump($stmt);
@@ -26,19 +26,13 @@
 
 		$rec = $stmt->fetch(PDO::FETCH_ASSOC);
 
-		$sql2 = 'SELECT count(*) as `cnt` from friends_table WHERE area_table_id = '.$rec['id'];
-		$stmt2 = $dbh->prepare($sql2);
-		$stmt2->execute();
-
-		
-		$rec2 = $stmt2->fetch(PDO::FETCH_ASSOC);
 			// echo '<tr>'.var_dump($rec).'</tr>';
 		if($rec==false)
 		{
 			break;
 		}	
 		// var_dump($rec2['cnt']);
-		echo "<tr><td><a href=friends.php/?id={$rec['id']}>{$rec['id']}</a></td><td><a href=friends.php/?id={$rec['id']}>{$rec['name']}</a></td><td>{$rec2['cnt']}</td></tr>";
+		echo "<tr><td><a href=friends.php/?id={$rec['id']}>{$rec['id']}</a></td><td><a href=friends.php/?id={$rec['id']}>{$rec['name']}</a></td><td>{$rec['friends_cnt']}</td></tr>";
 
 		}
 		$dbh = null;
